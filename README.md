@@ -8,6 +8,7 @@ then use the mathematics of probability to generate new names from the learned s
 in mind that the transformer architecture used in LLMs is a sophisticated means of learning the
 statistics of human language from large databases of online text and storing those statistics in a
 neural network, and then prompting the network to probabilistically generate human-like language.
+
 As you go through the algorithm design process, make sure to document your progress and all
 assumptions made in presentation slides. The designs in your slides should be in plain English
 using brief dot-points (with indentation to indicate blocks of instructions) or you can use diagrams,
