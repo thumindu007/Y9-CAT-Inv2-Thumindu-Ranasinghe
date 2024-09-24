@@ -1,4 +1,6 @@
 from collections import defaultdict as df
+import ast
+import plotly.express as px
 #https://pythongeeks.org/defaultdict-in-python/
 def long_short(names):
     shortest_name, longest_name = min(names, key=len), max(names, key=len)
@@ -28,6 +30,21 @@ def writing(file, pair_counts, start_end_counts):
             f.write(f"({pair}, {count})\n")
         for pair, count in start_end_counts.items(): # writes start and end 
             f.write(f"({pair}, {count})\n")
+    with open(file, 'r') as file:
+        biglist = [ast.literal_eval(line.strip()) for line in file.readlines()]
+    return biglist
+
+def piechat(l_pairs):
+    pairs = [f"({pair[0]},{pair[1]})" for pair, freq in l_pairs]
+    frequencies = [freq for pairs, freq in l_pairs]
+    fig = px.pie(
+     names=pairs, 
+     values=frequencies,
+     title="Frequency of Letter Pairs",
+     labels={'pairs': 'Letter Pairs'}
+    )
+    fig.update_traces(textinfo='label+percent', hoverinfo='label+value')
+    fig.show()
 
 with open('names.txt', 'r') as f:
     names = f.readlines()
@@ -40,4 +57,6 @@ with open('names.txt', 'r') as f:
 #print(f"\nLetter pairs: {letter_pairs}\nStart letter: {start}\nEnd letter: {end}\n")
 
 pair_counts, start_end_counts = count_letter_pairs(names) # Count letter pairs
-writing('pair_freqs_raw.txt', pair_counts, start_end_counts) # writes
+big_letter_pairs = writing('pair_freqs_raw.txt', pair_counts, start_end_counts) # writes
+
+piechat(big_letter_pairs)
