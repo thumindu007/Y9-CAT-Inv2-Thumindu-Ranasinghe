@@ -1,6 +1,7 @@
 from collections import defaultdict as df
 import ast
 import plotly.express as px
+import random
 #https://pythongeeks.org/defaultdict-in-python/
 def long_short(names):
     shortest_name, longest_name = min(names, key=len), max(names, key=len)
@@ -50,6 +51,16 @@ def pairs_with_spesific_letter(letter, pairs):
     filtered_pairs = [pair for pair in pairs if pair[0][0] == letter]
     return filtered_pairs
 
+def randomness(whichone):
+    coin, wheel = ['0', '0', '0', '0', '0', '0', '0', '0', '1', '1'], ['0', '0', '1', '2', '3', '3', '3', '3', '3', '3']
+    if whichone == 'coin': return random.choice(coin)
+    elif whichone == 'wheel': return random.choice(wheel)
+
+def weighted_random_choice(pairs):
+    frequencies = [freq for pair, freq in pairs]
+    chosen_pair = random.choices(pairs, weights=frequencies, k=1)[0]
+    return chosen_pair
+
 with open('names.txt', 'r') as f:
     names = f.readlines()
     names = [name.strip() for name in names] # cleans it up
@@ -65,7 +76,16 @@ big_letter_pairs = writing('pair_freqs_raw.txt', pair_counts, start_end_counts) 
 
 #piechat(big_letter_pairs)
 
-wanted_letter = input("What letter do you watn to search: ")
-result = pairs_with_spesific_letter(wanted_letter, big_letter_pairs)
-for pair in result:
-    print(pair)
+#wanted_letter = input("What letter do you watn to search: ")
+#result = pairs_with_spesific_letter(wanted_letter, big_letter_pairs)
+#for pair in result:
+#    print(pair)
+
+#print(f"probablitiy output: {randomness('coin')}")
+
+#print(f"probablitiy output: {randomness('wheel')}")
+
+#wanted_letter = input("What letter do you watn to search: ")
+#result = pairs_with_spesific_letter(wanted_letter, big_letter_pairs)
+#chosen_pair = weighted_random_choice(result)
+#print(f"Randomly selected pair: {chosen_pair}")
