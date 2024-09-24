@@ -46,6 +46,10 @@ def piechat(l_pairs):
     fig.update_traces(textinfo='label+percent', hoverinfo='label+value')
     fig.show()
 
+def pairs_with_spesific_letter(letter, pairs):
+    filtered_pairs = [pair for pair in pairs if pair[0][0] == letter]
+    return filtered_pairs
+
 with open('names.txt', 'r') as f:
     names = f.readlines()
     names = [name.strip() for name in names] # cleans it up
@@ -59,4 +63,9 @@ with open('names.txt', 'r') as f:
 pair_counts, start_end_counts = count_letter_pairs(names) # Count letter pairs
 big_letter_pairs = writing('pair_freqs_raw.txt', pair_counts, start_end_counts) # writes
 
-piechat(big_letter_pairs)
+#piechat(big_letter_pairs)
+
+wanted_letter = input("What letter do you watn to search: ")
+result = pairs_with_spesific_letter(wanted_letter, big_letter_pairs)
+for pair in result:
+    print(pair)
