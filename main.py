@@ -61,20 +61,39 @@ def weighted_random_choice(pairs):
     chosen_pair = random.choices(pairs, weights=frequencies, k=1)[0]
     return chosen_pair
 
+def display_top_pairs(file_path, n):
+    # Read the file content
+    with open(file_path, 'r') as f:
+        pair_freqs = []
+        for line in f:
+            # Convert the line string into a tuple (pair, frequency)
+            pair, freq = eval(line.strip())
+            pair_freqs.append((pair, freq))
+    
+    # Sort the pairs by frequency in descending order
+    sorted_pairs = sorted(pair_freqs, key=lambda x: x[1], reverse=True)
+    
+    # Display the top 'n' pairs
+    for i in range(min(n, len(sorted_pairs))):
+        print(sorted_pairs[i])
+
 with open('names.txt', 'r') as f:
     names = f.readlines()
     names = [name.strip() for name in names] # cleans it up
 
 #print(f"\nShortest name: {long_short(names)[0]}\nLongest name: {long_short(names)[1]}\n")
+#MAKE ALPHABETICALLY SORTED PAIRFREQUANCEY
+#MAKE FREQUCNY SORTED PAIRFREQUANCEY list
+name = input("Give a name: ")
+letter_pairs, start, end = detect_pairs(name)
+print(f"\nLetter pairs: {letter_pairs}\nStart letter: {start}\nEnd letter: {end}\n")
 
-#name = input("Give a name: ")
-#letter_pairs, start, end = detect_pairs(name)
-#print(f"\nLetter pairs: {letter_pairs}\nStart letter: {start}\nEnd letter: {end}\n")
+display_top_pairs('pair_freqs_raw.txt', 20) #PART 2
+
 
 pair_counts, start_end_counts = count_letter_pairs(names) # Count letter pairs
 big_letter_pairs = writing('pair_freqs_raw.txt', pair_counts, start_end_counts) # writes
-
-#piechat(big_letter_pairs)
+piechat(big_letter_pairs)
 
 #wanted_letter = input("What letter do you watn to search: ")
 #result = pairs_with_spesific_letter(wanted_letter, big_letter_pairs)
