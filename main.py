@@ -77,6 +77,45 @@ def display_top_pairs(file_path, n):
     for i in range(min(n, len(sorted_pairs))):
         print(sorted_pairs[i])
 
+def get_next_letter(last_letter):
+    # Filter the pair frequency dictionary for pairs that start with the last letter
+    candidates = [(pair[1], freq) for pair, freq in result_dict.items() if pair[0] == last_letter]
+    if not candidates:
+        return None
+    letters, frequencies = zip(*candidates)
+    # Normalize frequencies for a random weighted choice
+    total = sum(frequencies)
+    probabilities = [f / total for f in frequencies]
+    next_letter = random.choices(letters, probabilities)[0]
+    return next_letter
+
+def generate_name(start_letter, length=6):
+    name = [start_letter]  # Start with the user-inputted letter
+    # Generate the next characters based on pair frequencies
+    while len(name) < length:
+        last_letter = name[-1]
+        next_letter = get_next_letter(last_letter)
+        if next_letter is None:
+            break  # If no valid next letter, stop the generation
+        name.append(next_letter)
+    # Ensure the generated name doesn't end with '$'
+    if name[-1] == '$':
+        name.pop()  # Remove the last character if it's '$'
+
+    return ''.join(name)
+
+def generate_random_name(length=6):
+    letters = set(pair[0] for pair in result_dict.keys()).union(set(pair[1] for pair in result_dict.keys()))
+    
+    # Randomly choose letters for the name
+    name = [random.choice(list(letters)) for _ in range(length)]
+    
+    # Ensure the generated name doesn't end with '$'
+    if name[-1] == '$':
+        name.pop()  # Remove the last character if it's '$'
+    
+    return ''.join(name)
+
 with open('names.txt', 'r') as f:
     names = f.readlines()
     names = [name.strip() for name in names] # cleans it up
@@ -84,16 +123,19 @@ with open('names.txt', 'r') as f:
 #print(f"\nShortest name: {long_short(names)[0]}\nLongest name: {long_short(names)[1]}\n")
 #MAKE ALPHABETICALLY SORTED PAIRFREQUANCEY
 #MAKE FREQUCNY SORTED PAIRFREQUANCEY list
-name = input("Give a name: ")
-letter_pairs, start, end = detect_pairs(name)
-print(f"\nLetter pairs: {letter_pairs}\nStart letter: {start}\nEnd letter: {end}\n")
+#name = input("Give a name: ")
+#letter_pairs, start, end = detect_pairs(name)
+#print(f"\nLetter pairs: {letter_pairs}\nStart letter: {start}\nEnd letter: {end}\n")
 
-display_top_pairs('pair_freqs_raw.txt', 20) #PART 2
+#display_top_pairs('pair_freqs_raw.txt', 20) #PART 2
 
 
 pair_counts, start_end_counts = count_letter_pairs(names) # Count letter pairs
 big_letter_pairs = writing('pair_freqs_raw.txt', pair_counts, start_end_counts) # writes
-piechat(big_letter_pairs)
+global result_dict
+result_dict = {key: value for (key, value) in big_letter_pairs}
+
+#piechat(big_letter_pairs)
 
 #wanted_letter = input("What letter do you watn to search: ")
 #result = pairs_with_spesific_letter(wanted_letter, big_letter_pairs)
@@ -103,6 +145,23 @@ piechat(big_letter_pairs)
 #print(f"probablitiy output: {randomness('coin')}")
 
 #print(f"probablitiy output: {randomness('wheel')}")
+
+num_names = int(input("How many names do you want to generate? "))
+
+# Ask if the user wants to specify a starting letter
+generate_with_start_letter = input("Do you want to start with a specific letter? (yes/no): ").lower()
+
+if generate_with_start_letter == 'yes':
+    start_letter = input("Enter the letter to start the name with: ").lower()
+    # Generate and print the specified number of names based on the starting letter
+    for _ in range(num_names):
+        generated_name = generate_name(start_letter, length=6)
+        print("Generated name:", generated_name)
+else:
+    # Generate and print the specified number of completely random names
+    for _ in range(num_names):
+        generated_name = generate_random_name(length=6)
+        print("Generated name:", generated_name)
 
 #wanted_letter = input("What letter do you watn to search: ")
 #result = pairs_with_spesific_letter(wanted_letter, big_letter_pairs)
