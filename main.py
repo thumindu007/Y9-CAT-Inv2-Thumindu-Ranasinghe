@@ -116,6 +116,26 @@ def generate_random_name(length=6):
     
     return ''.join(name)
 
+def get_pair_probability(pair):
+    total_frequency = sum(result_dict.values())
+    pair_freq = result_dict.get(pair, 0)
+    
+    # Calculate probability by normalizing with total frequency
+    probability = pair_freq / total_frequency if total_frequency > 0 else 0
+    return probability
+
+# Function to evaluate a name and print its pair probabilities
+def evaluate_name(name):
+    print(f"Evaluating the name: {name}")
+    total_probability = 1.0
+    
+    for i in range(len(name) - 1):
+        pair = (name[i], name[i + 1])
+        pair_prob = get_pair_probability(pair)
+        total_probability *= pair_prob
+        print(f"Pair {pair}: Probability = {pair_prob:.6f}")
+    
+
 with open('names.txt', 'r') as f:
     names = f.readlines()
     names = [name.strip() for name in names] # cleans it up
@@ -151,19 +171,22 @@ num_names = int(input("How many names do you want to generate? "))
 # Ask if the user wants to specify a starting letter
 generate_with_start_letter = input("Do you want to start with a specific letter? (yes/no): ").lower()
 
-if generate_with_start_letter == 'yes':
-    start_letter = input("Enter the letter to start the name with: ").lower()
+#if generate_with_start_letter == 'yes':
+ #   start_letter = input("Enter the letter to start the name with: ").lower()
     # Generate and print the specified number of names based on the starting letter
-    for _ in range(num_names):
-        generated_name = generate_name(start_letter, length=6)
-        print("Generated name:", generated_name)
-else:
+ #   for _ in range(num_names):
+ #       generated_name = generate_name(start_letter, length=6)
+  #      print("Generated name:", generated_name)
+#else:
     # Generate and print the specified number of completely random names
-    for _ in range(num_names):
-        generated_name = generate_random_name(length=6)
-        print("Generated name:", generated_name)
+ #   for _ in range(num_names):
+ #       generated_name = generate_random_name(length=6)
+  #      print("Generated name:", generated_name)
 
 #wanted_letter = input("What letter do you watn to search: ")
 #result = pairs_with_spesific_letter(wanted_letter, big_letter_pairs)
 #chosen_pair = weighted_random_choice(result)
 #print(f"Randomly selected pair: {chosen_pair}")
+
+name_to_evaluate = input("Enter a name to evaluate: ").lower()
+evaluate_name(name_to_evaluate)
