@@ -8,6 +8,12 @@ def long_short(names):
     shortest_name, longest_name = min(names, key=len), max(names, key=len)
     return shortest_name, longest_name
 
+def letter_pairs(name):
+    pairs = []
+    for i in range(len(name) - 1):
+        pairs.append([name[i], name[i+1]])  # Create a pair and add to the list
+    return pairs
+
 def count_letter_pairs(names):
     pair_counts, start_end_counts = [df(int), df(int)]
     for name in names:
@@ -167,5 +173,7 @@ elif part == 8:
 elif part == 9:
     name_to_evaluate = input("Enter a name to evaluate: ").lower()
     evaluate_name(name_to_evaluate)
+elif part ==10:
+    print(letter_pairs(input("Give a name: ")))
 else:
     piechat(big_letter_pairs)
