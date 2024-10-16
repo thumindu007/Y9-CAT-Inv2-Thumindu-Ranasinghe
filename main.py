@@ -137,7 +137,11 @@ pair_counts, start_end_counts = count_letter_pairs(names) # Count letter pairs
 big_letter_pairs = writing('pair_freqs_raw.txt', pair_counts, start_end_counts) # writes
 global result_dict
 result_dict = {key: value for (key, value) in big_letter_pairs}
-print()
+
+sorted_pairs = sorted(result_dict.items(), key=lambda x: x[0])
+with open("pair_freqs_sorted.txt", "w") as file:
+    for pair, freq in sorted_pairs:
+        file.write(f"{pair}: {freq}\n")
 part = int(input("Use the menu below to explore the features of Tiny Language Model\n(1) Basic statistics (number of names, shortest, longest, e.t.c.)\n(2) Display the first _ lines of the sorted pairs frequency table\n(3) Display pairs starting with a particular character\n(4) Flip the coin and demonstrate correctness\n(5) Spin the numbered wheel and demonstrate correctness\n(6) Generate _ new names starting with letter _\n(7) Generate _ random names\n(8) Demonstrate the result of an untrained character-pair freq. table\n(9) Evaluate a name against the model by printing its pair probabilities\nEnter 1 to 9, or 0 to quit:"))
 if part == 1:
     print(f"\nShortest name: {long_short(names)[0]}\nLongest name: {long_short(names)[1]}\n")
